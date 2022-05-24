@@ -3,8 +3,6 @@
 //
 
 #include "Node.h"
-#include <cassert>
-
 
 Node *Node::max_child() const {
     assert(child_c);

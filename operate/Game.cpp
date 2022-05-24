@@ -118,9 +118,11 @@ bool Game::favorable_move() {
     return false;
 }
 
-Game::Game(int _M, int _N, int **_board, const int *_top, int noX, int noY, int _lastY) :
+Game::Game(int _M, int _N, int **_board, const int *_top, int _noX, int _noY, int _lastY) :
     M{static_cast<uint8_t>(_M)},
     N{static_cast<uint8_t>(_N)},
+    noX {static_cast<uint8_t>(_noX)},
+    noY {static_cast<uint8_t>(_noY)},
     lastY {static_cast<uint8_t>(_lastY)} {
     for (uint8_t i {0}; i < M; ++i) {
         for (uint8_t j {0}; j < N; ++j) {

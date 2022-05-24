@@ -93,7 +93,38 @@ public:
     }
 
     void repr() const {
+        char format1[] = "\n    const int M_ {%d}, N_ {%d}, noX_{%d}, noY_{%d};\n"
+                        "    \n"
+                        "    int dbg_board[M_][N_]=\n"
+                        "            {\n";
+        fprintf(stderr, format1, M, N, noX, noY);
+        for (int i {0}; i < M; ++i) {
+            fprintf(stderr, "                {");
+            for (int j {0}; j < N; ++j) {
+                fprintf(stderr, "%d, ", board[i][j]);
+            }
+            fprintf(stderr, "},\n");
 
+        }
+        char format2[] = "            };\n"
+                        "\n"
+                        "    for (int i = 0; i < M_; i++)\n"
+                        "    {\n"
+                        "        board[i] = new int[N_];\n"
+                        "        for (int j = 0; j < N_; j++)\n"
+                        "        {\n"
+                        "            board[i][j] = ((int*)dbg_board)[i * N_ + j];\n"
+                        "        }\n"
+                        "    }\n"
+                        "\n"
+                        "    int dbg_top[N_] = {";
+        fprintf(stderr, format2);
+        for (int i {0}; i < N; ++i) {
+            fprintf(stderr, "%d, ", top[i]);
+        }
+        char format3[] =  "};\n"
+                          "    Game game{M_, N_, board, dbg_top, noX_, noY_, %d};\n\n";
+         fprintf(stderr, format3, lastY);
     }
 #endif
 
@@ -129,7 +160,7 @@ private:
     uint8_t board[M_MAX][N_MAX];
     uint8_t top[N_MAX];
     uint8_t available[N_MAX];
-    uint8_t M, N, available_cnt;
+    uint8_t M, N, available_cnt, noX, noY;
     uint8_t lastY{0xff};
     bool last_sim_finalized {false};
     Player player {Player::Other};

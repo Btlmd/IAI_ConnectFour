@@ -34,6 +34,7 @@ public:
         fprintf(stderr, "\nDecision \n");
         game->show_tops();
         game->show_board();
+        game->repr();
 #endif
         auto begin = std::chrono::steady_clock::now();
 
