@@ -33,10 +33,12 @@ enum class Situation {
 
 //#define DEBUG
 
+//#define VEROBSE
+
+#define DECISION_INFO
+
 #ifndef DEBUG
 #define NDEBUG
-#else
-//#define VERBOSE
 #endif
 
 #endif //GITLAB_DEFINES_H

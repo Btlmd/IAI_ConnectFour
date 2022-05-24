@@ -34,7 +34,7 @@ public:
         game->show_tops();
         game->show_board();
         game->repr();
-#ifdef DEBUG
+#ifdef DECISION_INFO
         fprintf(stderr, "\nDecision \n");
         game->show_tops();
         game->show_board();
@@ -45,6 +45,7 @@ public:
         game->checkpoint();
         reset_pool();
         auto root = alloc();
+        root->set_side(Player::Other);
 
         while (true) {
             auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -96,8 +97,8 @@ public:
         }
 
         uint8_t column_choice {root->most_visited_child()->get_operation()};
-#ifdef DEBUG
-        fprintf(stderr, "Operation @ %d\n", column_choice);
+#ifdef DECISION_INFO
+        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld", root->visit_c, column_choice, node_pool_ptr);
 #endif
         return game->column_to_operation(column_choice);
     }
