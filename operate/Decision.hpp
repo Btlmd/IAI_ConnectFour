@@ -61,9 +61,6 @@ public:
 
             // deprecated expand
             if (ptr->visit_count() && ptr->expandable() && !ptr->children_count()) {
-//#ifdef DEBUG
-//                fprintf(stderr, "DEP_EXPAND");
-//#endif
                 uint8_t *positions;
                 auto pos_cnt {game->gen_available_positions(positions)};
                 if (pos_cnt) {
@@ -74,14 +71,19 @@ public:
             }
 
             // simulate
-            game->set_expansion_callback(ptr);
-            auto res = game->simulate();
-            game->clear_expansion_callback();
+            Situation res;
 
-            if (game->last_finalized()) {
-                ptr->set_final_result(res);
+            if (!ptr->expandable()) {
+                res = ptr->get_finalized_result();
+            } else {
+                game->set_expansion_callback(ptr);
+                res = game->simulate();
+                game->clear_expansion_callback();
+
+                if (game->last_finalized()) {
+                    ptr->set_final_result(res);
+                }
             }
-
 
             // backward
             backward(ptr, res);
@@ -92,7 +94,7 @@ public:
 
         uint8_t column_choice {root->most_visited_child()->get_operation()};
 #ifdef DECISION_INFO
-        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld", root->visit_c, column_choice, node_pool_ptr);
+        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\nNode Size: %d", root->visit_c, column_choice, node_pool_ptr, sizeof(Node));
 #endif
         return game->column_to_operation(column_choice);
     }

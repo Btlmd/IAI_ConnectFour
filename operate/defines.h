@@ -8,7 +8,7 @@
 const int M_MAX {12};
 const int N_MAX {12};
 const double UCB_C {0.5};
-const double DURATION_LIMIT {2.7};
+const double DURATION_LIMIT {2.5};
 const int MAX_PATH {144};
 
 const unsigned char NONE {0};
@@ -16,7 +16,7 @@ const unsigned char SELF {2};
 const unsigned char OTHER {1};
 const unsigned char BLOCK {3};
 
-const unsigned long long NODE_SPACE{800000000};
+const unsigned long long NODE_SPACE{700000000};
 
 enum class Player {
     None = NONE,
