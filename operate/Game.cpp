@@ -94,12 +94,12 @@ bool Game::favorable_move() {
             continue;
         }
 
-        if (other_player_c3) {
-            deprecated_positions[deprecated_cnt++] = available[i];
-        } else {
-            possible_positions[possible_cnt++] = available[i];
-        }
-//        possible_positions[possible_cnt++] = available[i];
+//        if (other_player_c3) {
+//            deprecated_positions[deprecated_cnt++] = available[i];
+//        } else {
+//            possible_positions[possible_cnt++] = available[i];
+//        }
+        possible_positions[possible_cnt++] = available[i];
     }
 
 
@@ -109,11 +109,11 @@ bool Game::favorable_move() {
         return true;
     }
 
-    if (deprecated_cnt) {
-        auto choice = rng(deprecated_cnt);
-        step(deprecated_positions[choice]);
-        return true;
-    }
+//    if (deprecated_cnt) {
+//        auto choice = rng(deprecated_cnt);
+//        step(deprecated_positions[choice]);
+//        return true;
+//    }
 
     return false;
 }

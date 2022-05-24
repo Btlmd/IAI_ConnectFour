@@ -8,7 +8,7 @@
 const int M_MAX {12};
 const int N_MAX {12};
 const double UCB_C {0.5};
-const double DURATION_LIMIT {2.75};
+const double DURATION_LIMIT {2.5};
 const int MAX_PATH {144};
 
 const unsigned char NONE {0};
