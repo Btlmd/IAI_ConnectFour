@@ -23,7 +23,9 @@ public:
 
     Game(int _M, int _N, int **_board, const int *_top, int noX, int noY, int _lastY);
 
-    ~Game() = default;
+    ~Game() {
+        delete ckpt;
+    };
 
     Situation eval() ;
 
