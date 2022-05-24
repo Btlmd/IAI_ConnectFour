@@ -4,6 +4,16 @@
 
 #include "Node.h"
 
+Node pool[NODE_SPACE / sizeof(Node)];
+uint64_t node_pool_ptr {0};
+Node *alloc() {
+    pool[node_pool_ptr].init();
+    return &pool[node_pool_ptr++];
+}
+void reset_pool() {
+    node_pool_ptr = 0;
+}
+
 Node *Node::max_child() const {
     assert(child_c);
     Node *max_at {nullptr};
@@ -22,7 +32,7 @@ Node *Node::most_visited_child() const {
     uint64_t max_visit_count {0};
     Node *max_visit_at {nullptr};
 #ifdef DEBUG
-    fprintf(stderr, "Choices: ");
+    fprintf(stderr, "Visits: %ld\nChoices: ", visit_c);
 #endif
     for (uint8_t i {0}; i < child_c; ++i) {
 #ifdef DEBUG
@@ -41,9 +51,10 @@ Node *Node::most_visited_child() const {
 }
 
 void Node::expand(uint8_t *positions, uint8_t count) {
+    assert(child_c == 0);
     assert(count > 0);
     for (int i {0}; i < count; ++i) {
-        children[i] = new Node;
+        children[i] = alloc();
         children[i]->operation = positions[i];
         children[i]->parent = this;
         reverse_side(children[i]);

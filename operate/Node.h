@@ -6,7 +6,6 @@
 #define GITLAB_NODE_H
 
 #include "defines.h"
-#include "Game.h"
 
 #include <cstdint>
 #include <cmath>
@@ -27,6 +26,16 @@ public:
     uint8_t operation {0xff};
     Situation finalized {Situation::None};
     Player side {};
+
+    inline void init() {
+        parent = nullptr;
+        win_c = 0;
+        visit_c = 0;
+        child_c = 0;
+        operation = 0xff;
+        finalized = Situation::None;
+        side = Player::None;
+    }
 
     [[nodiscard]] inline bool expandable () const {
         return finalized == Situation::None;
@@ -49,12 +58,7 @@ public:
     }
 
     [[nodiscard]] inline uint8_t get_operation() {
-//#ifdef DEBUG
-//        fprintf(stderr, "%d\n", operation);
-//#endif
-
         assert (parent && operation != 0xff);
-
         return operation;
     }
 
@@ -98,12 +102,15 @@ public:
         assert(s != Situation::None);
         finalized = s;
     }
-    static Node gen_root() {
-        Node root;
-        root.side = Player::Other;
-        return root;
+
+    inline void set_side(Player _side) {
+        side = _side;
     }
 };
 
+extern Node pool[NODE_SPACE / sizeof(Node)];
+extern uint64_t node_pool_ptr;
+Node *alloc();
+void reset_pool();
 
 #endif //GITLAB_NODE_H

@@ -53,10 +53,12 @@ bool Game::favorable_move() {
         t.undo();
     }
 
+    uint8_t all_cnt {0};
     uint8_t possible_cnt {0};
     uint8_t deprecated_cnt {0};
     uint8_t possible_positions[N_MAX];
     uint8_t deprecated_positions[N_MAX];
+    uint8_t all_positions[N_MAX];
 
     for (int i {0}; i < pos_cnt; ++i) {
         t.switch_player();
@@ -94,14 +96,20 @@ bool Game::favorable_move() {
             continue;
         }
 
-//        if (other_player_c3) {
-//            deprecated_positions[deprecated_cnt++] = available[i];
-//        } else {
-//            possible_positions[possible_cnt++] = available[i];
-//        }
-        possible_positions[possible_cnt++] = available[i];
+        if (other_player_c3) {
+            deprecated_positions[deprecated_cnt++] = available[i];
+        } else {
+            possible_positions[possible_cnt++] = available[i];
+        }
+        all_positions[all_cnt++] = available[i];
     }
 
+    if (expansion_callback) {
+        if (all_cnt) {
+            expansion_callback->expand(all_positions, all_cnt);
+        }
+        clear_expansion_callback();
+    }
 
     if (possible_cnt) {
         auto choice = rng(possible_cnt);
@@ -109,11 +117,11 @@ bool Game::favorable_move() {
         return true;
     }
 
-//    if (deprecated_cnt) {
-//        auto choice = rng(deprecated_cnt);
-//        step(deprecated_positions[choice]);
-//        return true;
-//    }
+    if (deprecated_cnt) {
+        auto choice = rng(deprecated_cnt);
+        step(deprecated_positions[choice]);
+        return true;
+    }
 
     return false;
 }

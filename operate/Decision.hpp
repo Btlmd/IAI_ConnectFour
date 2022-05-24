@@ -10,9 +10,9 @@
 #include <stack>
 
 #ifdef DEBUG
-#include <cstdio>
-#endif
 
+#endif
+#include <cstdio>
 
 class Decision {
 public:
@@ -30,6 +30,10 @@ public:
 
 
     Point operator()() {
+        fprintf(stderr, "\nDecision \n");
+        game->show_tops();
+        game->show_board();
+        game->repr();
 #ifdef DEBUG
         fprintf(stderr, "\nDecision \n");
         game->show_tops();
@@ -39,7 +43,8 @@ public:
         auto begin = std::chrono::steady_clock::now();
 
         game->checkpoint();
-        auto root {Node::gen_root()};
+        reset_pool();
+        auto root = alloc();
 
         while (true) {
             auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -50,7 +55,7 @@ public:
 
             // initialize game and search settings
             path_top = 0;
-            auto ptr {&root};
+            auto ptr {root};
 
             // select
             while (ptr->children_count()) {
@@ -59,8 +64,11 @@ public:
                 game->step(ptr->get_operation());
             }
 
-            // expand
+            // deprecated expand
             if (ptr->visit_count() && ptr->expandable() && !ptr->children_count()) {
+//#ifdef DEBUG
+//                fprintf(stderr, "DEP_EXPAND");
+//#endif
                 uint8_t *positions;
                 auto pos_cnt {game->gen_available_positions(positions)};
                 if (pos_cnt) {
@@ -71,7 +79,10 @@ public:
             }
 
             // simulate
+            game->set_expansion_callback(ptr);
             auto res = game->simulate();
+            game->clear_expansion_callback();
+
             if (game->last_finalized()) {
                 ptr->set_final_result(res);
             }
@@ -84,7 +95,7 @@ public:
             game->restore();
         }
 
-        uint8_t column_choice {root.most_visited_child()->get_operation()};
+        uint8_t column_choice {root->most_visited_child()->get_operation()};
 #ifdef DEBUG
         fprintf(stderr, "Operation @ %d\n", column_choice);
 #endif

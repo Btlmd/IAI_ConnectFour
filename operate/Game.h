@@ -16,7 +16,7 @@
 #ifdef DEBUG
 #include <cstdio>
 #endif
-
+#include <cstdio>
 
 class Game {
 public:
@@ -55,8 +55,6 @@ public:
     template<uint8_t n>
     bool situation_win() const;
 
-    bool situation_connect3() const;
-
     bool situation_tie();
 
     inline Point column_to_operation(uint8_t y) {
@@ -69,7 +67,6 @@ public:
         return last_sim_finalized;
     }
 
-#ifdef DEBUG
     void show_tops() const {
 
         fprintf(stderr, "TOP [");
@@ -128,7 +125,16 @@ public:
                           "    Game game{M_, N_, board, dbg_top, noX_, noY_, %d};\n\n";
          fprintf(stderr, format3, lastY);
     }
-#endif
+
+
+    inline void set_expansion_callback(Node *n) {
+        expansion_callback = n;
+    }
+
+    inline void clear_expansion_callback() {
+        expansion_callback = nullptr;
+    }
+
 
 private:
     inline static int rng(int upper) {
@@ -162,11 +168,13 @@ private:
     uint8_t board[M_MAX][N_MAX];
     uint8_t top[N_MAX];
     uint8_t available[N_MAX];
-    uint8_t M, N, available_cnt, noX, noY;
+    uint8_t favorable[N_MAX];
+    uint8_t M, N, available_cnt, favorable_cnt, noX, noY;
     uint8_t lastY{0xff};
     bool last_sim_finalized {false};
     Player player {Player::Other};
     Game *ckpt {nullptr};
+    Node *expansion_callback {nullptr};
 };
 
 #endif //GITLAB_GAME_H
