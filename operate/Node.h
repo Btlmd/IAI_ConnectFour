@@ -12,8 +12,8 @@
 #include <cmath>
 #include <limits>
 
-#ifdef DEBUG
 #include <cassert>
+#ifdef DEBUG
 #include <cstdio>
 #endif
 
