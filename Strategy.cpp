@@ -3,6 +3,9 @@
 #include "Point.h"
 #include "Strategy.h"
 
+#include "operate/Game.h"
+#include "operate/Decision.hpp"
+
 using namespace std;
 
 /*
@@ -48,6 +51,13 @@ extern "C" Point *getPoint(const int M, const int N, const int *top, const int *
 		该部分对参数使用没有限制，为了方便实现，你可以定义自己新的类、.h文件、.cpp文件
 	*/
 	//Add your own code below
+
+    Game game {M, N, board, top, noX, noY, lastY};
+    Decision decision {&game};
+
+    auto next_move = decision();
+    x = next_move.x;
+    y = next_move.y;
 
 	//a naive example
 	for (int i = N-1; i >= 0; i--) {
