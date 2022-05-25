@@ -61,81 +61,81 @@ bool Game::favorable_move() {
         t.undo();
     }
 
-    uint8_t all_cnt {0};
-//    uint8_t possible_cnt {0};
-//    uint8_t deprecated_cnt {0};
-//    uint8_t possible_positions[N_MAX];
-//    uint8_t deprecated_positions[N_MAX];
-    uint8_t all_positions[N_MAX];
-
-    for (int i {0}; i < pos_cnt; ++i) {
-        t.switch_player();
-        t.step(available[i]);
-
-        // search for the other player to be connect
-        t.store_av();
-        bool other_player_c4 {false};
-//        bool other_player_c3 {false};
-
-        auto pos_after {refresh_available_positions()};
-
-        for (int j {0}; j < pos_after; ++j) {
-            Tentative opt {this};
-            opt.switch_player();
-            opt.step(available[j]);
-
-            if (situation_win<4>()) {
-                other_player_c4 = true;
-                opt.undo();
-                break;
-            }
-
-//            if (situation_win<3>()) {
-//                other_player_c3 = true;
+//    uint8_t all_cnt {0};
+////    uint8_t possible_cnt {0};
+////    uint8_t deprecated_cnt {0};
+////    uint8_t possible_positions[N_MAX];
+////    uint8_t deprecated_positions[N_MAX];
+//    uint8_t all_positions[N_MAX];
+//
+//    for (int i {0}; i < pos_cnt; ++i) {
+//        t.switch_player();
+//        t.step(available[i]);
+//
+//        // search for the other player to be connect
+//        t.store_av();
+//        bool other_player_c4 {false};
+////        bool other_player_c3 {false};
+//
+//        auto pos_after {refresh_available_positions()};
+//
+//        for (int j {0}; j < pos_after; ++j) {
+//            Tentative opt {this};
+//            opt.switch_player();
+//            opt.step(available[j]);
+//
+//            if (situation_win<4>()) {
+//                other_player_c4 = true;
+//                opt.undo();
+//                break;
 //            }
-
-
-            opt.undo();
-        }
-        t.restore_av();
-        t.undo();
-
-        if (other_player_c4) {
-            continue;
-        }
-
-//        if (other_player_c3) {
-//            deprecated_positions[deprecated_cnt++] = available[i];
-//        } else {
-//            possible_positions[possible_cnt++] = available[i];
+//
+////            if (situation_win<3>()) {
+////                other_player_c3 = true;
+////            }
+//
+//
+//            opt.undo();
 //        }
-        all_positions[all_cnt++] = available[i];
-    }
-
-    if (expansion_callback) {
-        if (all_cnt) {
-            expansion_callback->expand(all_positions, all_cnt);
-        }
-        clear_expansion_callback();
-    }
-
-//    if (possible_cnt) {
-//        auto choice = rng(possible_cnt);
-//        step(possible_positions[choice]);
-//        return true;
+//        t.restore_av();
+//        t.undo();
+//
+//        if (other_player_c4) {
+//            continue;
+//        }
+//
+////        if (other_player_c3) {
+////            deprecated_positions[deprecated_cnt++] = available[i];
+////        } else {
+////            possible_positions[possible_cnt++] = available[i];
+////        }
+//        all_positions[all_cnt++] = available[i];
 //    }
 //
-//    if (deprecated_cnt) {
-//        auto choice = rng(deprecated_cnt);
-//        step(deprecated_positions[choice]);
+//    if (expansion_callback) {
+//        if (all_cnt) {
+//            expansion_callback->expand(all_positions, all_cnt);
+//        }
+//        clear_expansion_callback();
+//    }
+//
+////    if (possible_cnt) {
+////        auto choice = rng(possible_cnt);
+////        step(possible_positions[choice]);
+////        return true;
+////    }
+////
+////    if (deprecated_cnt) {
+////        auto choice = rng(deprecated_cnt);
+////        step(deprecated_positions[choice]);
+////        return true;
+////    }
+//
+//    if (all_cnt) {
+//        auto choice = rng(all_cnt);
+//        step(all_positions[choice]);
 //        return true;
 //    }
-
-    if (all_cnt) {
-        auto choice = rng(all_cnt);
-        step(all_positions[choice]);
-        return true;
-    }
 
     return false;
 }
