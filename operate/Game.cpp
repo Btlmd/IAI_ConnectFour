@@ -46,6 +46,10 @@ bool Game::favorable_move() {
         bool res;
         res = situation_win<4>();
         if (res) {
+            if (expansion_callback) {
+                expansion_callback->expand(&available[i], 1);
+                clear_expansion_callback();
+            }
             return true;
         }
         t.undo();
@@ -56,6 +60,10 @@ bool Game::favorable_move() {
         bool res;
         res = situation_win<4>();
         if (res) {
+            if (expansion_callback) {
+                expansion_callback->expand(&available[i], 1);
+                clear_expansion_callback();
+            }
             return true;
         }
         t.undo();
