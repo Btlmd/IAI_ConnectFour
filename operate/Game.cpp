@@ -82,9 +82,9 @@ bool Game::favorable_move() {
                 break;
             }
 
-            if (situation_win<3>()) {
-                other_player_c3 = true;
-            }
+//            if (situation_win<3>()) {
+//                other_player_c3 = true;
+//            }
 
 
             opt.undo();
@@ -96,11 +96,11 @@ bool Game::favorable_move() {
             continue;
         }
 
-        if (other_player_c3) {
-            deprecated_positions[deprecated_cnt++] = available[i];
-        } else {
-            possible_positions[possible_cnt++] = available[i];
-        }
+//        if (other_player_c3) {
+//            deprecated_positions[deprecated_cnt++] = available[i];
+//        } else {
+//            possible_positions[possible_cnt++] = available[i];
+//        }
         all_positions[all_cnt++] = available[i];
     }
 
@@ -111,15 +111,21 @@ bool Game::favorable_move() {
         clear_expansion_callback();
     }
 
-    if (possible_cnt) {
-        auto choice = rng(possible_cnt);
-        step(possible_positions[choice]);
-        return true;
-    }
+//    if (possible_cnt) {
+//        auto choice = rng(possible_cnt);
+//        step(possible_positions[choice]);
+//        return true;
+//    }
+//
+//    if (deprecated_cnt) {
+//        auto choice = rng(deprecated_cnt);
+//        step(deprecated_positions[choice]);
+//        return true;
+//    }
 
-    if (deprecated_cnt) {
-        auto choice = rng(deprecated_cnt);
-        step(deprecated_positions[choice]);
+    if (all_cnt) {
+        auto choice = rng(all_cnt);
+        step(all_positions[choice]);
         return true;
     }
 
@@ -140,7 +146,7 @@ Game::Game(int _M, int _N, int **_board, const int *_top, int _noX, int _noY, in
     for (uint8_t i {0}; i < N; ++i) {
         top[i] = static_cast<uint8_t>(_top[i]);
     }
-    board[noX][noY] = 3;
+    board[noX][noY] = BLOCK;
 }
 
 void Game::restore_from(const Game &g) {

@@ -31,8 +31,9 @@ public:
 
     Point operator()() {
 #ifdef DECISION_INFO
-        fprintf(stderr, "\nDecision \n");
+        fprintf(stderr, "\n\nDecision \n");
         game->repr();
+        game->show_board();
 #endif
         auto begin = std::chrono::steady_clock::now();
 
@@ -94,7 +95,7 @@ public:
 
         uint8_t column_choice {root->most_visited_child()->get_operation()};
 #ifdef DECISION_INFO
-        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\nNode Size: %d", root->visit_c, column_choice, node_pool_ptr, sizeof(Node));
+        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\nNode Size: %d\n", root->visit_c, column_choice, node_pool_ptr, sizeof(Node));
 #endif
         return game->column_to_operation(column_choice);
     }
