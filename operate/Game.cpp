@@ -41,33 +41,21 @@ bool Game::favorable_move() {
 #endif
 
     for (int i {0}; i < pos_cnt; ++i) {
-
         t.switch_player();
         t.step(available[i]);
         bool res;
-
         res = situation_win<4>();
         if (res) {
             return true;
         }
-
-
-//        res = situation_win<4>();
-//        if (res) {
-//            return true;
-//        }
-
         t.undo();
     }
 
     for (int i {0}; i < pos_cnt; ++i) {
-//        t.switch_player();
         t.step(available[i]);
-
-        auto res{eval()};
-
-        // immediate win
-        if (res == Situation::SelfWin) {
+        bool res;
+        res = situation_win<4>();
+        if (res) {
             return true;
         }
         t.undo();
