@@ -64,7 +64,10 @@ public:
 
     [[nodiscard]] Node *max_child() const ;
 
-    [[nodiscard]] Node *most_visited_child() const ;
+#ifndef DECISION_INFO
+    [[nodiscard]]
+#endif
+    Node *most_visited_child() const ;
 
     [[nodiscard]] inline Node *operator [] (uint8_t idx) {
         assert(idx < child_c);
@@ -106,6 +109,8 @@ public:
     inline void set_side(Player _side) {
         side = _side;
     }
+
+    Node *match_child(uint8_t y);
 };
 
 
@@ -114,5 +119,6 @@ extern uint8_t *pool[NODE_SPACE_CNT * sizeof(Node)];
 extern uint64_t node_pool_ptr;
 Node *alloc();
 void reset_pool();
+bool inherit_tree();
 
 #endif //GITLAB_NODE_H

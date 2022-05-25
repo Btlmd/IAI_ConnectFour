@@ -24,24 +24,58 @@ public:
         auto ptr {leaf};
         while (ptr) {
             ptr->update(res);
+            if (ptr == root) {
+                break;
+            }
             ptr = ptr->get_parent();
         }
     }
 
 
+    static void reset_root() {
+#ifdef DECISION_INFO
+        fprintf(stderr, "Tree re-constructed\n");
+#endif
+        reset_pool();
+        root = alloc();
+        root->set_side(Player::Other);
+    }
+
     Point operator()() {
 #ifdef DECISION_INFO
         fprintf(stderr, "\n\nDecision \n");
-        game->repr();
+//        game->repr();
         game->show_board();
 #endif
 //        assert(false);
-        auto begin = std::chrono::steady_clock::now();
+
 
         game->checkpoint();
-        reset_pool();
-        auto root = alloc();
-        root->set_side(Player::Other);
+
+        Node *new_root {nullptr};
+
+        if (root && inherit_tree()) {
+#ifdef DECISION_INFO
+            fprintf(stderr, "Try to inherit tree\n");
+#endif
+            new_root = root->match_child(game->get_last_operation());
+        }
+#ifdef DECISION_INFO
+        else {
+            fprintf(stderr, "Corresponding node missing\n");
+        }
+#endif
+
+        if (new_root) {
+            root = new_root;
+        } else {
+            reset_root();
+        }
+
+#ifdef DECISION_INFO
+        root->most_visited_child();
+#endif
+        auto begin = std::chrono::steady_clock::now();
 
         while (true) {
             auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -91,15 +125,22 @@ public:
             game->restore();
         }
 
-        uint8_t column_choice {root->most_visited_child()->get_operation()};
+        auto mvc = root->most_visited_child();
+
+        uint8_t column_choice {mvc->get_operation()};
 #ifdef DECISION_INFO
         fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\nNode Size: %d\n", root->visit_c, column_choice, node_pool_ptr, sizeof(Node));
 #endif
+        mvc->most_visited_child();
+        root = mvc;
         return game->column_to_operation(column_choice);
     }
 
 private:
     Game *game {nullptr};
+    static Node *root;
 };
+
+Node *Decision::root {nullptr};
 
 #endif

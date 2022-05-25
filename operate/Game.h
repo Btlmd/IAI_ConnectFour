@@ -125,6 +125,10 @@ public:
         expansion_callback = nullptr;
     }
 
+    inline uint8_t get_last_operation() const  {
+        return lastY;
+    }
+
 
 private:
     inline static int rng(int upper) {
