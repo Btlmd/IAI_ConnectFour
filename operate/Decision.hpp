@@ -31,7 +31,7 @@ public:
 
     Point operator()() {
 #ifdef DECISION_INFO
-        fprintf(stderr, "\nDecision \n");
+        fprintf(stderr, "\n\nDecision \n");
         game->repr();
         game->show_board();
 #endif
@@ -101,6 +101,7 @@ public:
     }
 
 private:
+    uint8_t M, N;
     Node *path[MAX_PATH];
     size_t path_top {0};
     Game *game {nullptr};
