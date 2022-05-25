@@ -4,6 +4,8 @@
 
 #include "Node.h"
 
+#include <cstdio>
+
 uint8_t *pool[NODE_SPACE_CNT * sizeof(Node)];
 uint64_t node_pool_ptr {0};
 Node *alloc() {
@@ -32,11 +34,11 @@ Node *Node::max_child() const {
 Node *Node::most_visited_child() const {
     uint64_t max_visit_count {0};
     Node *max_visit_at {nullptr};
-#ifdef DEBUG
+#ifdef DECISION_INFO
     fprintf(stderr, "Visits: %ld\nChoices: ", visit_c);
 #endif
     for (uint8_t i {0}; i < child_c; ++i) {
-#ifdef DEBUG
+#ifdef DECISION_INFO
         fprintf(stderr, "(%d, %ld, %ld)", children[i]->operation, children[i]->win_c, children[i]->visit_c);
 #endif
         if (children[i]->visit_c > max_visit_count) {
@@ -45,7 +47,7 @@ Node *Node::most_visited_child() const {
         }
     }
     assert(max_visit_at);
-#ifdef DEBUG
+#ifdef DECISION_INFO
     fprintf(stderr, "\n");
 #endif
     return max_visit_at;

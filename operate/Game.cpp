@@ -210,7 +210,7 @@ Situation Game::simulate() {
                 step(available[choice]);
             }
         }
-
+        clear_expansion_callback();
         first_flag = false;
     }
 }
