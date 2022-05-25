@@ -4,11 +4,12 @@
 
 #include "Node.h"
 
-Node pool[NODE_SPACE / sizeof(Node)];
+uint8_t *pool[NODE_SPACE_CNT * sizeof(Node)];
 uint64_t node_pool_ptr {0};
 Node *alloc() {
-    pool[node_pool_ptr].init();
-    return &pool[node_pool_ptr++];
+    auto p {(Node *) pool};
+    p[node_pool_ptr].init();
+    return &p[node_pool_ptr++];
 }
 void reset_pool() {
     node_pool_ptr = 0;

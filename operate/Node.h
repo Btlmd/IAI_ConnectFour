@@ -108,7 +108,9 @@ public:
     }
 };
 
-extern Node pool[NODE_SPACE / sizeof(Node)];
+
+const size_t NODE_SPACE_CNT = NODE_SPACE / sizeof(Node);
+extern uint8_t *pool[NODE_SPACE_CNT * sizeof(Node)];
 extern uint64_t node_pool_ptr;
 Node *alloc();
 void reset_pool();

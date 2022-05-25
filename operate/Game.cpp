@@ -41,7 +41,25 @@ bool Game::favorable_move() {
 #endif
 
     for (int i {0}; i < pos_cnt; ++i) {
+        t.step(available[i]);
+        bool res;
+
+        res = situation_win<4>();
+        if (res) {
+            return true;
+        }
+
         t.switch_player();
+        res = situation_win<4>();
+        if (res) {
+            return true;
+        }
+
+        t.undo();
+    }
+
+    for (int i {0}; i < pos_cnt; ++i) {
+//        t.switch_player();
         t.step(available[i]);
 
         auto res{eval()};
@@ -54,10 +72,10 @@ bool Game::favorable_move() {
     }
 
     uint8_t all_cnt {0};
-    uint8_t possible_cnt {0};
-    uint8_t deprecated_cnt {0};
-    uint8_t possible_positions[N_MAX];
-    uint8_t deprecated_positions[N_MAX];
+//    uint8_t possible_cnt {0};
+//    uint8_t deprecated_cnt {0};
+//    uint8_t possible_positions[N_MAX];
+//    uint8_t deprecated_positions[N_MAX];
     uint8_t all_positions[N_MAX];
 
     for (int i {0}; i < pos_cnt; ++i) {
@@ -67,7 +85,7 @@ bool Game::favorable_move() {
         // search for the other player to be connect
         t.store_av();
         bool other_player_c4 {false};
-        bool other_player_c3 {false};
+//        bool other_player_c3 {false};
 
         auto pos_after {refresh_available_positions()};
 
@@ -280,7 +298,14 @@ void Game::Tentative::step(uint8_t y) {
     previous_last_Y = g->lastY;
 
     g->top[y]--;
+
+
+    if (g->board[g->top[y]][y] == BLOCK) {
+        g->top[y]--;
+    }
+
     assert(g->top[y] != 0xff);
+
     g->board[g->top[y]][y] = static_cast<uint8_t>(g->player);
     g->lastY = last_tentative_Y;
 
@@ -301,6 +326,9 @@ void Game::Tentative::undo() {
 
     // restore top
     g->top[last_tentative_Y]++;
+//    if (g->board[g->top[last_tentative_Y]][last_tentative_Y] == BLOCK) {
+//        g->top[last_tentative_Y]++;
+//    }
     assert(g->top[last_tentative_Y] <= g->M);
 
     // restore lastY
@@ -340,10 +368,9 @@ void Game::Tentative::restore_av() {
     memcpy(g->available, available, N_MAX);
 }
 
-void Game::Tentative::unstep() {
-
-}
 
 void Game::Tentative::unswitch() {
-
+    assert(switched);
+    g->switch_player();
+    switched = false;
 }

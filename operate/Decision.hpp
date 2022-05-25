@@ -35,7 +35,7 @@ public:
         game->repr();
         game->show_board();
 #endif
-        assert(false);
+//        assert(false);
         auto begin = std::chrono::steady_clock::now();
 
         game->checkpoint();
