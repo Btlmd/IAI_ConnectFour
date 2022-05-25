@@ -39,70 +39,58 @@ bool Game::favorable_move() {
 #ifdef VERBOSE
     fprintf(stderr, "\nFav Move\n");
 #endif
-
+    t.switch_();
     for (int i {0}; i < pos_cnt; ++i) {
-        t.switch_player();
-        t.step(available[i]);
 
+        t.step(available[i]);
         auto res{eval()};
 
         // immediate win
         if (res == Situation::SelfWin) {
             return true;
         }
-        t.undo();
+        t.unstep();
     }
+    t.unswitch();
 
     uint8_t all_cnt {0};
-    uint8_t possible_cnt {0};
-    uint8_t deprecated_cnt {0};
-    uint8_t possible_positions[N_MAX];
-    uint8_t deprecated_positions[N_MAX];
     uint8_t all_positions[N_MAX];
 
+    t.switch_();
     for (int i {0}; i < pos_cnt; ++i) {
-        t.switch_player();
+
         t.step(available[i]);
 
         // search for the other player to be connect
         t.store_av();
         bool other_player_c4 {false};
-        bool other_player_c3 {false};
 
         auto pos_after {refresh_available_positions()};
 
+        Tentative opt {this};
+        opt.switch_();
         for (int j {0}; j < pos_after; ++j) {
-            Tentative opt {this};
-            opt.switch_player();
-            opt.step(available[j]);
 
-            if (situation_win<4>()) {
+
+            opt.step(available[j]);
+            bool c4 {situation_win<4>()};
+            opt.unstep();
+
+            if (c4) {
                 other_player_c4 = true;
-                opt.undo();
                 break;
             }
 
-//            if (situation_win<3>()) {
-//                other_player_c3 = true;
-//            }
-
-
-            opt.undo();
         }
         t.restore_av();
-        t.undo();
+        t.unstep();
 
         if (other_player_c4) {
             continue;
         }
-
-//        if (other_player_c3) {
-//            deprecated_positions[deprecated_cnt++] = available[i];
-//        } else {
-//            possible_positions[possible_cnt++] = available[i];
-//        }
         all_positions[all_cnt++] = available[i];
     }
+    t.unswitch();
 
     if (expansion_callback) {
         if (all_cnt) {
@@ -110,18 +98,6 @@ bool Game::favorable_move() {
         }
         clear_expansion_callback();
     }
-
-//    if (possible_cnt) {
-//        auto choice = rng(possible_cnt);
-//        step(possible_positions[choice]);
-//        return true;
-//    }
-//
-//    if (deprecated_cnt) {
-//        auto choice = rng(deprecated_cnt);
-//        step(deprecated_positions[choice]);
-//        return true;
-//    }
 
     if (all_cnt) {
         auto choice = rng(all_cnt);
@@ -292,8 +268,31 @@ void Game::Tentative::step(uint8_t y) {
 #endif
 }
 
+void Game::Tentative::switch_() {
+#ifdef DEBUG
+    assert(!switched);
+    switched = true;
+#endif
+    g->switch_player();
+}
 
-void Game::Tentative::undo() {
+void Game::Tentative::store_av() {
+#ifdef DEBUG
+    assert (!av_stored);
+    av_stored = true;
+#endif
+    memcpy(available, g->available, N_MAX);
+}
+
+void Game::Tentative::restore_av() {
+#ifdef DEBUG
+    assert(av_stored);
+    av_stored = false;
+#endif
+    memcpy(g->available, available, N_MAX);
+}
+
+void Game::Tentative::unstep() {
     assert(last_tentative_Y != 0xff);
 
     // restore board
@@ -314,36 +313,12 @@ void Game::Tentative::undo() {
 #endif
 
     last_tentative_Y = 0xff;
-
-    if (switched) {
-        g->switch_player();
-        switched = false;
-    }
-
-}
-
-void Game::Tentative::switch_player() {
-    assert(!switched);
-    switched = true;
-    g->switch_player();
-}
-
-void Game::Tentative::store_av() {
-    assert (!av_stored);
-    av_stored = true;
-    memcpy(available, g->available, N_MAX);
-}
-
-void Game::Tentative::restore_av() {
-    assert(av_stored);
-    av_stored = false;
-    memcpy(g->available, available, N_MAX);
-}
-
-void Game::Tentative::unstep() {
-
 }
 
 void Game::Tentative::unswitch() {
-
+#ifdef DEBUG
+    assert(switched);
+    switched = false;
+#endif
+    g->switch_player();
 }
