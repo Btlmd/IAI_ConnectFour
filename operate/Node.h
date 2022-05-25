@@ -18,14 +18,14 @@
 
 class Node {
 public:
-    Node *parent {nullptr};
+    Node *parent;
     Node *children[12];
-    uint64_t win_c {0};
-    uint64_t visit_c {0};
-    uint8_t child_c {0};
-    uint8_t operation {0xff};
-    Situation finalized {Situation::None};
-    Player side {};
+    uint64_t win_c;
+    uint64_t visit_c;
+    uint8_t child_c;
+    uint8_t operation;
+    Situation finalized;
+    Player side;
 
     inline void init() {
         parent = nullptr;

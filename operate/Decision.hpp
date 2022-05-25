@@ -35,6 +35,7 @@ public:
         game->repr();
         game->show_board();
 #endif
+        assert(false);
         auto begin = std::chrono::steady_clock::now();
 
         game->checkpoint();
@@ -49,13 +50,10 @@ public:
             if (delta / 1000.0 > DURATION_LIMIT)
                 break;
 
-            // initialize game and search settings
-            path_top = 0;
             auto ptr {root};
 
             // select
             while (ptr->children_count()) {
-                path[path_top++] = ptr;
                 ptr = ptr->max_child();
                 game->step(ptr->get_operation());
             }
@@ -101,9 +99,6 @@ public:
     }
 
 private:
-    uint8_t M, N;
-    Node *path[MAX_PATH];
-    size_t path_top {0};
     Game *game {nullptr};
 };
 
