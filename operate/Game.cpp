@@ -41,6 +41,8 @@ bool Game::favorable_move() {
 #endif
 
     for (int i {0}; i < pos_cnt; ++i) {
+
+        t.switch_player();
         t.step(available[i]);
         bool res;
 
@@ -49,11 +51,11 @@ bool Game::favorable_move() {
             return true;
         }
 
-        t.switch_player();
-        res = situation_win<4>();
-        if (res) {
-            return true;
-        }
+
+//        res = situation_win<4>();
+//        if (res) {
+//            return true;
+//        }
 
         t.undo();
     }
@@ -151,11 +153,11 @@ bool Game::favorable_move() {
 }
 
 Game::Game(int _M, int _N, int **_board, const int *_top, int _noX, int _noY, int _lastY) :
-    M{static_cast<uint8_t>(_M)},
-    N{static_cast<uint8_t>(_N)},
-    noX {static_cast<uint8_t>(_noX)},
-    noY {static_cast<uint8_t>(_noY)},
-    lastY {static_cast<uint8_t>(_lastY)} {
+        M{static_cast<uint8_t>(_M)},
+        N{static_cast<uint8_t>(_N)},
+        noX {static_cast<uint8_t>(_noX)},
+        noY {static_cast<uint8_t>(_noY)},
+        lastY {static_cast<uint8_t>(_lastY)} {
     for (uint8_t i {0}; i < M; ++i) {
         for (uint8_t j {0}; j < N; ++j) {
             board[i][j] = static_cast<uint8_t>(_board[i][j]);
