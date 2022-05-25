@@ -92,37 +92,27 @@ public:
     }
 
     void repr() const {
-        char format1[] = "\n    const int M_ {%d}, N_ {%d}, noX_{%d}, noY_{%d};\n"
-                        "    \n"
-                        "    int dbg_board[M_][N_]=\n"
-                        "            {\n";
+        char format1[] = "const int M_ {%d}, N_ {%d}, noX_{%d}, noY_{%d};"
+                        "int dbg_board[M_][N_]={";
         fprintf(stderr, format1, M, N, noX, noY);
         for (int i {0}; i < M; ++i) {
-            fprintf(stderr, "                {");
+            fprintf(stderr, "{");
             for (int j {0}; j < N; ++j) {
                 fprintf(stderr, "%d, ", board[i][j]);
             }
-            fprintf(stderr, "},\n");
+            fprintf(stderr, "},");
 
         }
-        char format2[] = "            };\n"
-                        "\n"
-                        "    for (int i = 0; i < M_; i++)\n"
-                        "    {\n"
-                        "        board[i] = new int[N_];\n"
-                        "        for (int j = 0; j < N_; j++)\n"
-                        "        {\n"
-                        "            board[i][j] = ((int*)dbg_board)[i * N_ + j];\n"
-                        "        }\n"
-                        "    }\n"
-                        "\n"
-                        "    int dbg_top[N_] = {";
+        char format2[] = "};\n"
+                        "for (int i = 0; i < M_; i++)"
+                        "{board[i] = new int[N_];for (int j = 0; j < N_; j++){board[i][j] = ((int*)dbg_board)[i * N_ + j];}}"
+                        "int dbg_top[N_] = {";
         fprintf(stderr, format2);
         for (int i {0}; i < N; ++i) {
             fprintf(stderr, "%d, ", top[i]);
         }
         char format3[] =  "};\n"
-                          "    Game game{M_, N_, board, dbg_top, noX_, noY_, %d};\n\n";
+                          "Game game{M_, N_, board, dbg_top, noX_, noY_, %d};\n";
          fprintf(stderr, format3, lastY);
     }
 
@@ -150,8 +140,7 @@ private:
         Tentative (Game *_g): g{_g} {}
         void step(uint8_t y);
         void unstep();
-        void undo();
-        void switch_player();
+        void switch_();
         void unswitch();
         void store_av();
         void restore_av();
