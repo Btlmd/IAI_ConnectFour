@@ -44,7 +44,7 @@ public:
     Point operator()() {
 #ifdef DECISION_INFO
         fprintf(stderr, "\n\nDecision \n");
-//        game->repr();
+        game->repr();
         game->show_board();
 #endif
 //        assert(false);
@@ -143,7 +143,7 @@ public:
 
         uint8_t column_choice {mvc->get_operation()};
 #ifdef DECISION_INFO
-        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\nNode Size: %d\n", root->visit_c, column_choice, node_pool_ptr, sizeof(Node));
+        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\n", root->visit_c, column_choice, node_pool_ptr);
 #endif
         mvc->most_visited_child();
         root = mvc;
