@@ -75,6 +75,9 @@ public:
 #ifdef DECISION_INFO
         root->most_visited_child();
 #endif
+
+        assert(root->side == Player::Other);
+
         auto begin = std::chrono::steady_clock::now();
 
         while (true) {

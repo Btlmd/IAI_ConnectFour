@@ -15,7 +15,7 @@ const unsigned char SELF {2};
 const unsigned char OTHER {1};
 const unsigned char BLOCK {3};
 
-const unsigned long long NODE_SPACE {700000000};
+const unsigned long long NODE_SPACE {800000000};
 const unsigned long long MARGIN_NODE_CNT {1000000};
 
 enum class Player {
