@@ -54,6 +54,8 @@ public:
 
         Node *new_root {nullptr};
 
+#ifdef ROOT_MOVE
+
         if (root && inherit_tree()) {
 #ifdef DECISION_INFO
             fprintf(stderr, "INH_COND\n");
@@ -66,6 +68,7 @@ public:
         }
 #endif
 
+#endif
         if (new_root) {
             root = new_root;
         } else {

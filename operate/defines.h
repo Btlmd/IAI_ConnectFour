@@ -41,4 +41,6 @@ enum class Situation {
 #define NDEBUG
 #endif
 
+//#define ROOT_MOVE
+
 #endif //GITLAB_DEFINES_H

@@ -11,7 +11,7 @@ uint64_t node_pool_ptr {1};
 Node *alloc() {
     node_pool_ptr %= NODE_SPACE_CNT;
     if (node_pool_ptr == 0) {
-        fprintf(stderr, "<Error: Pool Reset>\n");
+        fprintf(stderr, "<Error: Pool Reset to 0>\n");
     }
     auto p {(Node *) pool};
     p[node_pool_ptr].init();
@@ -23,6 +23,7 @@ bool inherit_tree() {
 }
 
 void reset_pool() {
+    fprintf(stderr, "<Info: Pool Reset to 1>\n");
     node_pool_ptr = 1;
 }
 
