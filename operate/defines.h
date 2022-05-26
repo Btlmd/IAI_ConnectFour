@@ -15,7 +15,7 @@ const unsigned char SELF {2};
 const unsigned char OTHER {1};
 const unsigned char BLOCK {3};
 
-const unsigned long long NODE_SPACE {900000000};
+const unsigned long long NODE_SPACE {1000000000};
 const unsigned long long MARGIN_NODE_CNT {2000000};
 
 enum class Player {
@@ -35,7 +35,7 @@ enum class Situation {
 
 //#define VEROBSE
 
-#define DECISION_INFO
+//#define DECISION_INFO
 
 #ifndef DEBUG
 #define NDEBUG
