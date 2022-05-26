@@ -80,6 +80,10 @@ public:
 
         auto begin = std::chrono::steady_clock::now();
 
+#ifdef DECISION_INFO
+        uint64_t this_time_visit_count {0};
+#endif
+
         while (true) {
             auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::steady_clock::now() - begin
@@ -126,7 +130,14 @@ public:
 
             // restore the initial game setting
             game->restore();
+#ifdef DECISION_INFO
+            ++this_time_visit_count;
+#endif
         }
+
+#ifdef DECISION_INFO
+        fprintf(stderr, " > Visit This Round: %ld\n", this_time_visit_count);
+#endif
 
         auto mvc = root->most_visited_child();
 
