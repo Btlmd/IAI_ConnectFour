@@ -92,27 +92,27 @@ public:
     }
 
     void repr() const {
-        char format1[] = "const int M_ {%d}, N_ {%d}, noX_{%d}, noY_{%d};"
+        char format1[] = "const int M_{%d},N_{%d},noX_{%d},noY_{%d};"
                          "int dbg_board[M_][N_]={";
         fprintf(stderr, format1, M, N, noX, noY);
         for (int i {0}; i < M; ++i) {
             fprintf(stderr, "{");
             for (int j {0}; j < N; ++j) {
-                fprintf(stderr, "%d, ", board[i][j]);
+                fprintf(stderr, "%d,", board[i][j]);
             }
             fprintf(stderr, "},");
 
         }
-        char format2[] = "};\n"
-                         "for (int i = 0; i < M_; i++)"
-                         "{board[i] = new int[N_];for (int j = 0; j < N_; j++){board[i][j] = ((int*)dbg_board)[i * N_ + j];}}"
-                         "int dbg_top[N_] = {";
+        char format2[] = "};"
+                         "for (int i=0;i<M_;i++)"
+                         "{board[i]=new int[N_];for (int j=0;j< N_;j++){board[i][j]=((int*)dbg_board)[i*N_+j];}}"
+                         "int dbg_top[N_]={";
         fprintf(stderr, format2);
         for (int i {0}; i < N; ++i) {
-            fprintf(stderr, "%d, ", top[i]);
+            fprintf(stderr, "%d,", top[i]);
         }
-        char format3[] =  "};\n"
-                          "Game game{M_, N_, board, dbg_top, noX_, noY_, %d};\n";
+        char format3[] =  "};"
+                          "Game game{M_,N_,board,dbg_top,noX_,noY_,%d};\n";
         fprintf(stderr, format3, lastY);
     }
 

@@ -34,7 +34,7 @@ public:
 
     static void reset_root() {
 #ifdef DECISION_INFO
-        fprintf(stderr, "Tree re-constructed\n");
+        fprintf(stderr, "TRC\n");
 #endif
         reset_pool();
         root = alloc();
@@ -56,13 +56,13 @@ public:
 
         if (root && inherit_tree()) {
 #ifdef DECISION_INFO
-            fprintf(stderr, "Try to inherit tree\n");
+            fprintf(stderr, "INH_COND\n");
 #endif
             new_root = root->match_child(game->get_last_operation());
         }
 #ifdef DECISION_INFO
         else {
-            fprintf(stderr, "Corresponding node missing\n");
+            fprintf(stderr, "ND_MISSING\n");
         }
 #endif
 
@@ -136,14 +136,14 @@ public:
         }
 
 #ifdef DECISION_INFO
-        fprintf(stderr, " > Visit This Round: %ld\n", this_time_visit_count);
+        fprintf(stderr, " > VTR: %ld\n", this_time_visit_count);
 #endif
 
         auto mvc = root->most_visited_child();
 
         uint8_t column_choice {mvc->get_operation()};
 #ifdef DECISION_INFO
-        fprintf(stderr, "Total simulation: %ld\nOperation @ %d\nNode usage: %ld\n", root->visit_c, column_choice, node_pool_ptr);
+        fprintf(stderr, "RV: %ld\nOp @ %d\nNU: %ld\n", root->visit_c, column_choice, node_pool_ptr);
 #endif
         mvc->most_visited_child();
         root = mvc;
