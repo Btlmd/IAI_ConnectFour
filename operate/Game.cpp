@@ -64,6 +64,7 @@ bool Game::favorable_move() {
                 expansion_callback->expand(&available[i], 1);
                 clear_expansion_callback();
             }
+            t.switch_player();
             return true;
         }
         t.undo();
