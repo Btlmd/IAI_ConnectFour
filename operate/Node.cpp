@@ -10,9 +10,13 @@ uint8_t *pool[NODE_SPACE_CNT * sizeof(Node)];
 uint64_t node_pool_ptr {1};
 Node *alloc() {
     node_pool_ptr %= NODE_SPACE_CNT;
+
+#ifdef POOL_INFO
     if (node_pool_ptr == 0) {
         fprintf(stderr, "<Error: Pool Reset to 0>\n");
     }
+#endif
+
     auto p {(Node *) pool};
     p[node_pool_ptr].init();
     return &p[node_pool_ptr++];
@@ -23,7 +27,9 @@ bool inherit_tree() {
 }
 
 void reset_pool() {
+#ifdef POOL_INFO
     fprintf(stderr, "<Info: Pool Reset to 1>\n");
+#endif
     node_pool_ptr = 1;
 }
 

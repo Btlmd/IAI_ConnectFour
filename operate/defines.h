@@ -43,4 +43,6 @@ enum class Situation {
 
 //#define ROOT_MOVE
 
+//#define POOL_INFO
+
 #endif //GITLAB_DEFINES_H
