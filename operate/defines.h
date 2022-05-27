@@ -41,7 +41,7 @@ enum class Situation {
 #define NDEBUG
 #endif
 
-#define ROOT_MOVE
+//#define ROOT_MOVE
 
 //#define POOL_INFO
 
