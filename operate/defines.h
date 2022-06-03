@@ -35,7 +35,7 @@ enum class Situation {
 
 //#define VEROBSE
 
-//#define DECISION_INFO
+#define DECISION_INFO
 
 #ifndef DEBUG
 #define NDEBUG
