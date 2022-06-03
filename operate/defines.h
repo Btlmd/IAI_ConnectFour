@@ -7,7 +7,7 @@
 
 const int M_MAX {12};
 const int N_MAX {12};
-const double UCB_C {0.5};
+const double UCB_C {0.7};
 const double DURATION_LIMIT {2.3};
 
 const unsigned char NONE {0};
