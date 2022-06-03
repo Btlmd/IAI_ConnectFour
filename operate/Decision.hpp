@@ -75,9 +75,9 @@ public:
             reset_root();
         }
 
-#ifdef DECISION_INFO
-        root->most_visited_child();
-#endif
+//#ifdef DECISION_INFO
+//        root->most_visited_child();
+//#endif
 
         assert(root->side == Player::Other);
 
